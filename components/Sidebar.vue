@@ -93,7 +93,7 @@
 
 <script>
 // Services:
-import Sidebar from '../../../../services/sidebar.js'
+import Sidebar from '../../../services/sidebar.js'
 
 export default {
   name: 'ui-layoutadmin-sidebar',
