@@ -231,7 +231,7 @@ export default {
 
       $hdr.$emit('load', 'logout');
 
-      var url = '/api/auth/v1/logout';
+      var url = '/api/iam/auth/v1/logout';
 
       if (localStorage.getItem('authtoken'))
         url += '?token=' + localStorage.getItem('authtoken');
