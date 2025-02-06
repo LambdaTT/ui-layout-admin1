@@ -20,9 +20,9 @@
           <div :class="`col-12 q-py-xs-xs q-px-md-xs ${dynamicColClass}`">
             <q-btn class="full-width" dense label="Fechar" color="grey-8" icon="close" v-close-popup></q-btn>
           </div>
-          <div v-show="!HideActions" v-for="action in Actions" :key="action.label"
+          <div v-show="!HideActions" v-for="action in visibleActions" :key="action.label"
             :class="`col-12 q-py-xs-xs q-px-md-xs ${dynamicColClass}`">
-            <q-btn dense class="full-width" v-show="!action.hide" :label="action.label" :color="action.color"
+            <q-btn dense class="full-width" :label="action.label" :color="action.color"
               :icon="action.icon" @click="action.fn"></q-btn>
           </div>
         </div>
@@ -62,8 +62,12 @@ export default {
   },
 
   computed: {
+    visibleActions() {
+      return this.Actions.filter(obj => !obj.hide);
+    },
+
     dynamicColClass() {
-      return `col-md-${12 / (this.Actions.length + 1)}`
+      return `col-md-${12 / (this.visibleActions.length + 1)}`
     }
   },
 
