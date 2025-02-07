@@ -63,6 +63,7 @@ export default {
 
   computed: {
     visibleActions() {
+      if(!this.Actions) return [];
       return this.Actions.filter(obj => !obj.hide);
     },
 
