@@ -101,11 +101,9 @@ export default {
     return {
       drawerState: false,
       miniState: true,
-      loggedUser: null,
-      rawNavigator: [],
-      navigator: [],
       searchTerm: null,
       searchTimeout: null,
+      searchTermActive: null,
     }
   },
 
@@ -119,20 +117,46 @@ export default {
     }
   },
 
-  methods: {
-    getNavigatorData() {
-      Sidebar.getData(this.$route.path)
-        .then((navbardata) => {
-          this.loggedUser = navbardata.loggedUser;
-          this.loggedUser.fullName = this.loggedUser.ds_first_name + " " + this.loggedUser.ds_last_name;
-          if (this.loggedUser.ds_avatar_img_url == null)
-            this.loggedUser.ds_avatar_img_url = '/resources/img/unknown-user.jpg';
-
-          this.navigator = navbardata.navigator;
-          this.rawNavigator = navbardata.navigator;
-        });
+  computed: {
+    navigatorData() {
+      return Sidebar.getData();
     },
 
+    loggedUser() {
+      var logged = this.navigatorData.loggedUser;
+      logged.fullName = logged.ds_first_name + " " + logged.ds_last_name;
+      if (logged.ds_avatar_img_url == null)
+            logged.ds_avatar_img_url = '/resources/img/unknown-user.jpg';
+      return logged;
+    },
+
+    rawNavigator() {
+      return this.navigatorData?.navigator ?? [];
+    },
+
+    navigator() {
+      var navigator = this.$utils.cloneObj(this.rawNavigator ?? []);
+
+      for (let i = 0; i < navigator.length; i++) {
+        let item = navigator[i];
+
+        if(!!this.searchTermActive) {
+          if (!!item.subItems) {
+            item.menuOpen = true;
+            item.subItems = item.subItems.filter((obj) => obj.tags.includes(this.searchTermActive.toLowerCase()));
+          }
+        } else {          
+          item.menuOpen = false;
+        }
+      }
+
+      return (!!this.searchTermActive) ? 
+        navigator.filter((obj) => obj.tags.includes(this.searchTermActive.toLowerCase())) : 
+        this.rawNavigator;
+    }
+  },
+
+  methods: {
     navTo(url) {
       this.$router.push(url);
     },
@@ -140,32 +164,9 @@ export default {
     search() {
       clearTimeout(this.searchTimeout);
       this.searchTimeout = setTimeout(() => {
-        if (!!this.searchTerm) {
-          this.navigator = this.$utils.cloneObj(this.rawNavigator);
-          for (let i = 0; i < this.navigator.length; i++) {
-            let item = this.navigator[i];
-
-            if (!!item.subItems) {
-              item.menuOpen = true;
-              item.subItems = item.subItems.filter((obj) => obj.tags.includes(this.searchTerm))
-            }
-          }
-
-          this.navigator = this.navigator.filter((obj) => obj.tags.includes(this.searchTerm));
-        }
-        else {
-          for (let i = 0; i < this.navigator.length; i++) {
-            this.navigator[i].menuOpen = false;
-          }
-          this.navigator = this.rawNavigator;
-        }
-
+        this.searchTermActive = this.searchTerm;
       }, 300);
     }
-  },
-
-  created() {
-    this.getNavigatorData();
   },
 }
 </script>
