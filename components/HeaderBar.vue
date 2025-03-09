@@ -1,6 +1,6 @@
 <template>
   <q-header elevated class="bg-white">
-    <q-toolbar class="q-pa-sm text-grey-9">
+    <q-toolbar class="q-pa-sm text-grey-8">
       <!-- Btn: toggle menu -->
       <q-btn flat @click="$emit('toggle-drawer')" round dense icon="menu" />
 
