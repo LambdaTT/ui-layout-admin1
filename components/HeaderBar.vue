@@ -174,7 +174,7 @@ export default {
 
     getNotifications() {
       var $hdr = this;
-      return this.$http.get('/api/usernotifications/v1/notification?$limit=15&$sort_by=2&$sort_direction=DESC')
+      return this.$http.get('/api/messaging/v1/notification?$limit=15&$sort_by=2&$sort_direction=DESC')
         .then(function (response) {
           $hdr.notifications = [];
           $hdr.newNotifications = 0;
@@ -209,7 +209,7 @@ export default {
 
     readNotification(notification) {
       if (notification.do_read != 'Y') {
-        this.$http.put('/api/usernotifications/v1/notification/' + notification.ds_key, { 'do_read': 'Y' })
+        this.$http.put('/api/messaging/v1/notification/' + notification.ds_key, { 'do_read': 'Y' })
           .then(() => {
             this.selectedNotification = notification;
             notification.do_read = 'Y'
