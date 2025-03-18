@@ -126,7 +126,7 @@ export default {
       var logged = this.navigatorData.loggedUser;
       logged.fullName = logged.ds_first_name + " " + logged.ds_last_name;
       if (logged.ds_avatar_img_url == null)
-            logged.ds_avatar_img_url = '/resources/img/unknown-user.jpg';
+        logged.ds_avatar_img_url = '/resources/img/unknown-user.jpg';
       return logged;
     },
 
@@ -140,18 +140,18 @@ export default {
       for (let i = 0; i < navigator.length; i++) {
         let item = navigator[i];
 
-        if(!!this.searchTermActive) {
+        if (!!this.searchTermActive) {
           if (!!item.subItems) {
             item.menuOpen = true;
             item.subItems = item.subItems.filter((obj) => obj.tags.includes(this.searchTermActive.toLowerCase()));
           }
-        } else {          
+        } else {
           item.menuOpen = false;
         }
       }
 
-      return (!!this.searchTermActive) ? 
-        navigator.filter((obj) => obj.tags.includes(this.searchTermActive.toLowerCase())) : 
+      return (!!this.searchTermActive) ?
+        navigator.filter((obj) => obj.tags.includes(this.searchTermActive.toLowerCase())) :
         this.rawNavigator;
     }
   },
