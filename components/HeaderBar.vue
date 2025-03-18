@@ -55,7 +55,8 @@
             </q-item>
             <q-item class="text-center">
               <div class="full-width">
-                <q-btn color="primary" flat style="font-size: 0.95em;" @click="$router.push('/notifications')">
+                <q-btn color="primary" flat style="font-size: 0.95em;"
+                  @click="$router.push('/messaging/notifications')">
                   Ver todas notificações
                 </q-btn>
               </div>
