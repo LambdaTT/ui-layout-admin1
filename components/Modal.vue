@@ -1,6 +1,6 @@
 <template>
   <q-dialog :full-width="FullWidth" @hide="hideFn" @show="showFn" :persistent="Persistent" v-model="show">
-    <q-card>
+    <q-card style="min-width: 360px">
       <q-toolbar class="full-width bg-teal text-white">
         <q-avatar v-if="!!Icon">
           <q-icon :name="Icon"></q-icon>
