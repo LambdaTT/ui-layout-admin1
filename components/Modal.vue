@@ -1,5 +1,6 @@
 <template>
-  <q-dialog :full-width="FullWidth" @hide="hideFn" @show="showFn" :persistent="Persistent" v-model="show">
+  <q-dialog backdrop-filter="blur(4px) contrast(40%)" :full-width="FullWidth" @hide="hideFn" @show="showFn"
+    :persistent="Persistent" v-model="show">
     <q-card style="min-width: 360px">
       <q-toolbar class="full-width bg-teal text-white">
         <q-avatar v-if="!!Icon">
@@ -22,8 +23,8 @@
           </div>
           <div v-show="!HideActions" v-for="action in visibleActions" :key="action.label"
             :class="`col-12 q-py-xs-xs q-px-md-xs ${dynamicColClass}`">
-            <q-btn dense class="full-width" :label="action.label" :color="action.color"
-              :icon="action.icon" @click="action.fn"></q-btn>
+            <q-btn dense class="full-width" :label="action.label" :color="action.color" :icon="action.icon"
+              @click="action.fn"></q-btn>
           </div>
         </div>
       </q-card-section>
@@ -63,7 +64,7 @@ export default {
 
   computed: {
     visibleActions() {
-      if(!this.Actions) return [];
+      if (!this.Actions) return [];
       return this.Actions.filter(obj => !obj.hide);
     },
 
