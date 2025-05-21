@@ -16,15 +16,16 @@
         <slot></slot>
       </q-card-section>
 
-      <q-card-section>
+      <q-card-section class="q-pt-none">
         <div class="row justify-end">
-          <div :class="`col-12 q-py-xs-xs q-px-md-xs ${dynamicColClass}`">
-            <q-btn class="full-width" dense label="Fechar" color="grey-8" icon="close" v-close-popup></q-btn>
+          <div class="col-12 col-md q-py-xs-xs q-px-md-xs">
+            <q-btn class="full-width" dense label="Fechar" color="grey-8" icon="close" v-close-popup>
+            </q-btn>
           </div>
-          <div v-show="!HideActions" v-for="action in visibleActions" :key="action.label"
-            :class="`col-12 q-py-xs-xs q-px-md-xs ${dynamicColClass}`">
-            <q-btn dense class="full-width" :label="action.label" :color="action.color" :icon="action.icon"
-              @click="action.fn"></q-btn>
+          <div v-show="!HideActions" v-for="action in visibleActions" :key="action.label" class="col-12 q-py-xs-xs q-px-md-xs col-md">
+            <q-btn class="full-width" dense :label="action.label" :color="action.color" :icon="action.icon"
+              @click="action.fn">
+            </q-btn>
           </div>
         </div>
       </q-card-section>
@@ -67,10 +68,6 @@ export default {
       if (!this.Actions) return [];
       return this.Actions.filter(obj => !obj.hide);
     },
-
-    dynamicColClass() {
-      return `col-md-${12 / (this.visibleActions.length + 1)}`
-    }
   },
 
   methods: {
