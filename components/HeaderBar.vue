@@ -197,7 +197,7 @@ export default {
           }
         })
         .catch((error) => {
-          console.log(error)
+          console.error(error)
           if (error.response?.status == 401) location.href = '/login';
         });
     },
