@@ -55,7 +55,7 @@
             <q-separator v-if="item.type == 'header'" />
             <!-- Item with no children -->
             <q-item :class="`${$route.path == item.href ? 'bg-teal text-white' : ''}`" :clickable="item.type == 'item'"
-              @click="navTo(item.href, item)" v-if="item.subItems?.length == 0">
+              @click="navTo(item.href, item)" v-if="!item.subItems || item.subItems.length == 0">
               <q-item-section avatar>
                 <span v-if="item.type == 'header'">&nbsp;</span>
                 <q-icon v-if="item.type == 'item'" :name="item.icon"></q-icon>
