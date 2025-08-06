@@ -2,10 +2,10 @@
   <div class="text-grey-9">
     <q-layout v-if="state === 'ready'" view="hHh Lpr lff" container-fluid style="height: 300px"
       class="shadow-2 rounded-borders">
-      <HeaderBar @load="load" @loaded="loaded" @toggleDrawer="this.drawerState = !this.drawerState;"
+      <La1HeaderBar @load="load" @loaded="loaded" @toggleDrawer="this.drawerState = !this.drawerState;"
         LogoPath="/resources/img/logo-horizontal.png" :SearchOnHelpFn="searchOnHelp" :LogoutFn="signOut">
-      </HeaderBar>
-      <Sidebar @load="load" @loaded="loaded" @drawer-hide="drawerState = false" :outerDrawerState="drawerState" />
+      </La1HeaderBar>
+      <La1Sidebar @load="load" @loaded="loaded" @drawer-hide="drawerState = false" :outerDrawerState="drawerState" />
 
       <q-page-container>
         <div id="content-wrapper">
@@ -17,9 +17,6 @@
 </template>
 
 <script>
-// Services:
-import { auth, permissions } from 'src/modules/lambdatt-ui-iam/services.js'
-
 // Libs:
 import { useQuasar } from 'quasar'
 
@@ -59,7 +56,7 @@ export default {
     },
 
     signOut() {
-      return auth.logout(this)
+      return this.$iam.services.auth.logout(this)
         .then(() => location.href = '/login');
     },
 
@@ -78,7 +75,7 @@ export default {
             if (err.response?.status == 401 && !(err.config?.url.includes('/iam/auth/v1/log'))) {
               this.$router.push(`/login?goTo=${goToRoute}`);
 
-              this.$utils.notify({
+              this.$toolcase.services.utils.notify({
                 message: 'Sua sessão expirou. Por favor, entre novamente.',
                 type: 'warning',
                 position: 'top-right',
@@ -99,8 +96,8 @@ export default {
     this.$q.loading.show();
 
     try {
-      await auth.authenticate(this);
-      await permissions.getUserPermissions();
+      await this.$iam.services.auth.authenticate(this);
+      await this.$iam.services.permissions.getUserPermissions();
     } catch (error) {
       console.error(error);
     }

@@ -1,5 +1,5 @@
 <template>
-  <Card :Title="Title" :Icon="Icon" :HeaderBgColor="headerBgColor" :HeaderTextColor="headerTextColor" dense
+  <La1Card :Title="Title" :Icon="Icon" :HeaderBgColor="headerBgColor" :HeaderTextColor="headerTextColor" dense
     class="q-ma-sm">
     <template #actions>
       <slot name="actions"></slot>
@@ -8,7 +8,7 @@
     <div style="min-height: 250px;">
       <slot></slot>
     </div>
-    </Card>
+  </La1Card>
 </template>
 
 <script>

@@ -135,7 +135,7 @@ export default {
     },
 
     navigator() {
-      var navigator = this.$utils.cloneObj(this.rawNavigator ?? []);
+      var navigator = this.$toolcase.services.utils.cloneObj(this.rawNavigator ?? []);
 
       for (let i = 0; i < navigator.length; i++) {
         let item = navigator[i];

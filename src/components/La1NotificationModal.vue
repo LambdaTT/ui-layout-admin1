@@ -44,7 +44,7 @@
 <script>
 export default {
   name: 'ui-layoutadmin-modal',
-  
+
   props: {
     modelValue: {
       type: Boolean,
@@ -69,7 +69,7 @@ export default {
     },
 
     dtCreated() {
-      return this.$utils.dateFormat(new Date(this.notification.dt_created), 'd/m/y h:i:s');
+      return this.$toolcase.services.utils.dateFormat(new Date(this.notification.dt_created), 'd/m/y h:i:s');
     }
   },
 

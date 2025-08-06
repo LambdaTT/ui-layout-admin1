@@ -103,20 +103,19 @@
     </q-toolbar>
 
     <!-- Notification Modal -->
-    <NotificationModal v-model="showNotificationDialog" :notification="selectedNotification" />
+    <La1NotificationModal v-model="showNotificationDialog" :notification="selectedNotification" />
   </q-header>
 </template>
 
 <script>
+import { IAM } from '/src/modules/lambdatt-ui-iam';
+
 export default {
   name: 'ui-layoutadmin-headerbar',
 
   props: {
     LogoPath: String,
     SearchOnHelpFn: Function,
-  },
-
-  components: {
   },
 
   data() {
@@ -175,7 +174,7 @@ export default {
 
     getNotifications() {
       var $hdr = this;
-      return this.$http.get('/api/messaging/v1/notification?$limit=15&$sort_by=2&$sort_direction=DESC')
+      return this.$toolcase.services.http.get('/messaging/v1/notification?$limit=15&$sort_by=2&$sort_direction=DESC')
         .then(function (response) {
           $hdr.notifications = [];
           $hdr.newNotifications = 0;
@@ -184,7 +183,7 @@ export default {
             var notification = response.data[i];
 
             // Handle creation date:
-            notification.dtCreated = notification.dt_created ? this.$utils.dateFormat(new Date(notification.dt_created), 'd/m/y h:i:s') : null;
+            notification.dtCreated = notification.dt_created ? this.$toolcase.services.utils.dateFormat(new Date(notification.dt_created), 'd/m/y h:i:s') : null;
 
             // Handle author's avatar and name:
             notification.author_name = notification.author_name == 'System' ? 'Sistema' : notification.author_name;
@@ -210,14 +209,14 @@ export default {
 
     readNotification(notification) {
       if (notification.do_read != 'Y') {
-        this.$http.put('/api/messaging/v1/notification/' + notification.ds_key, { 'do_read': 'Y' })
+        this.$toolcase.services.http.put('/messaging/v1/notification/' + notification.ds_key, { 'do_read': 'Y' })
           .then(() => {
             this.selectedNotification = notification;
             notification.do_read = 'Y'
           })
           .catch((response) => {
             console.error("An error has occurred on the attempt to read notification.", response);
-            this.$utils.notifyError(response);
+            this.$toolcase.services.utils.notifyError(response);
           });
 
       } else {
@@ -232,12 +231,12 @@ export default {
 
       $hdr.$emit('load', 'logout');
 
-      var url = '/api/iam/auth/v1/logout';
+      var url = IAM.ENDPOINTS.AUTH.LOGOUT;
 
       if (localStorage.getItem('authtoken'))
         url += '?token=' + localStorage.getItem('authtoken');
 
-      this.$http.delete(url)
+      this.$toolcase.services.http.delete(url)
         .then(function () {
           $hdr.$emit('loaded', 'logout');
           localStorage.removeItem('authtoken');
