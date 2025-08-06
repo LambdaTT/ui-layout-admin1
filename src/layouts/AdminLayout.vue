@@ -64,7 +64,7 @@ export default {
       var debounceTimeout = null;
       var goToRoute = null;
 
-      this.$eventbroadcaster.$on('http-request-sent', (reqPromise) => {
+      this.$toolcase.services.eventbroadcaster.$on('http-request-sent', (reqPromise) => {
         reqPromise.catch((err) => {
           goToRoute = goToRoute ?? this.$route.path;
           if (!!debounceTimeout) {
@@ -87,8 +87,8 @@ export default {
     },
 
     loadHandler() {
-      this.$eventbroadcaster.$on('load', this.load);
-      this.$eventbroadcaster.$on('loaded', this.loaded);
+      this.$toolcase.services.eventbroadcaster.$on('load', this.load);
+      this.$toolcase.services.eventbroadcaster.$on('loaded', this.loaded);
     }
   },
 
