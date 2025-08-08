@@ -56,7 +56,7 @@ export default {
     },
 
     signOut() {
-      return this.$iam.services.auth.logout(this)
+      return this.$getService('iam/auth').logout(this)
         .then(() => location.href = '/login');
     },
 
@@ -64,7 +64,7 @@ export default {
       var debounceTimeout = null;
       var goToRoute = null;
 
-      this.$toolcase.services.eventbroadcaster.$on('http-request-sent', (reqPromise) => {
+      this.$getService('toolcase/eventbroadcaster').$on('http-request-sent', (reqPromise) => {
         reqPromise.catch((err) => {
           goToRoute = goToRoute ?? this.$route.path;
           if (!!debounceTimeout) {
@@ -75,7 +75,7 @@ export default {
             if (err.response?.status == 401 && !(err.config?.url.includes('/iam/auth/v1/log'))) {
               this.$router.push(`/login?goTo=${goToRoute}`);
 
-              this.$toolcase.services.utils.notify({
+              this.$getService('toolcase/utils').notify({
                 message: 'Sua sessão expirou. Por favor, entre novamente.',
                 type: 'warning',
                 position: 'top-right',
@@ -87,8 +87,8 @@ export default {
     },
 
     loadHandler() {
-      this.$toolcase.services.eventbroadcaster.$on('load', this.load);
-      this.$toolcase.services.eventbroadcaster.$on('loaded', this.loaded);
+      this.$getService('toolcase/eventbroadcaster').$on('load', this.load);
+      this.$getService('toolcase/eventbroadcaster').$on('loaded', this.loaded);
     }
   },
 
@@ -96,8 +96,8 @@ export default {
     this.$q.loading.show();
 
     try {
-      await this.$iam.services.auth.authenticate(this);
-      await this.$iam.services.permissions.getUserPermissions();
+      await this.$getService('iam/auth').authenticate(this);
+      await this.$getService('iam/permissions').getUserPermissions();
     } catch (error) {
       console.error(error);
     }

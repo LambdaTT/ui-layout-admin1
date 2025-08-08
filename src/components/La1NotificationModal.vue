@@ -69,7 +69,7 @@ export default {
     },
 
     dtCreated() {
-      return this.$toolcase.services.utils.dateFormat(new Date(this.notification.dt_created), 'd/m/y h:i:s');
+      return this.$getService('toolcase/utils').dateFormat(new Date(this.notification.dt_created), 'd/m/y h:i:s');
     }
   },
 

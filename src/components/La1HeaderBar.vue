@@ -108,8 +108,6 @@
 </template>
 
 <script>
-import { IAM } from '/src/modules/lambdatt-ui-iam';
-
 export default {
   name: 'ui-layoutadmin-headerbar',
 
@@ -174,7 +172,7 @@ export default {
 
     getNotifications() {
       var $hdr = this;
-      return this.$toolcase.services.http.get('/messaging/v1/notification?$limit=15&$sort_by=2&$sort_direction=DESC')
+      return this.$getService('toolcase/http').get('/messaging/v1/notification?$limit=15&$sort_by=2&$sort_direction=DESC')
         .then(function (response) {
           $hdr.notifications = [];
           $hdr.newNotifications = 0;
@@ -183,7 +181,7 @@ export default {
             var notification = response.data[i];
 
             // Handle creation date:
-            notification.dtCreated = notification.dt_created ? this.$toolcase.services.utils.dateFormat(new Date(notification.dt_created), 'd/m/y h:i:s') : null;
+            notification.dtCreated = notification.dt_created ? this.$getService('toolcase/utils').dateFormat(new Date(notification.dt_created), 'd/m/y h:i:s') : null;
 
             // Handle author's avatar and name:
             notification.author_name = notification.author_name == 'System' ? 'Sistema' : notification.author_name;
@@ -209,14 +207,14 @@ export default {
 
     readNotification(notification) {
       if (notification.do_read != 'Y') {
-        this.$toolcase.services.http.put('/messaging/v1/notification/' + notification.ds_key, { 'do_read': 'Y' })
+        this.$getService('toolcase/http').put('/messaging/v1/notification/' + notification.ds_key, { 'do_read': 'Y' })
           .then(() => {
             this.selectedNotification = notification;
             notification.do_read = 'Y'
           })
           .catch((response) => {
             console.error("An error has occurred on the attempt to read notification.", response);
-            this.$toolcase.services.utils.notifyError(response);
+            this.$getService('toolcase/utils').notifyError(response);
           });
 
       } else {
@@ -231,12 +229,12 @@ export default {
 
       $hdr.$emit('load', 'logout');
 
-      var url = IAM.ENDPOINTS.AUTH.LOGOUT;
+      var url = this.getModule('iam').ENDPOINTS.AUTH.LOGOUT;
 
       if (localStorage.getItem('authtoken'))
         url += '?token=' + localStorage.getItem('authtoken');
 
-      this.$toolcase.services.http.delete(url)
+      this.$getService('toolcase/http').delete(url)
         .then(function () {
           $hdr.$emit('loaded', 'logout');
           localStorage.removeItem('authtoken');
