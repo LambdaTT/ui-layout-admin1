@@ -4,8 +4,8 @@
     <q-scroll-area class="fit" :horizontal-thumb-style="{ opacity: 0 }">
       <q-list padding>
         <!-- Link: My Account -->
-        <q-item :class="`${$route.path == '/iam/my-account' ? 'bg-teal text-white' : ''}`" :clickable="true"
-          @click="navTo('/iam/my-account')">
+        <q-item v-if="loggedUser != null" :class="`${$route.path == '/iam/my-account' ? 'bg-teal text-white' : ''}`"
+          :clickable="true" @click="navTo('/iam/my-account')">
           <q-tooltip>Minha Conta</q-tooltip>
           <q-item-section avatar>
             <img style="border-radius: 50%; width:25px;" :src="loggedUser?.ds_avatar_img_url">
@@ -14,7 +14,7 @@
             <span>{{ loggedUser?.fullName }}</span>
           </q-item-section>
         </q-item>
-        <q-separator></q-separator>
+        <q-separator v-if="loggedUser != null"></q-separator>
 
         <q-item>
           <q-tooltip>Pesquisar no sistema</q-tooltip>
@@ -92,9 +92,6 @@
 </template>
 
 <script>
-// Services:
-import Sidebar from 'src/services/sidebar.js'
-
 export default {
   name: 'ui-layoutadmin-sidebar',
   data() {
@@ -118,24 +115,21 @@ export default {
   },
 
   computed: {
-    navigatorData() {
-      return Sidebar.getData();
-    },
-
     loggedUser() {
-      var logged = this.navigatorData.loggedUser;
+      if (this.$moduleExists('iam') == false) return null;
+
+      var logged = this.$getService('iam/auth').getLoggedUser();
+      if (logged == null) return null;
+
       logged.fullName = logged.ds_first_name + " " + logged.ds_last_name;
       if (logged.ds_avatar_img_url == null)
         logged.ds_avatar_img_url = '/resources/img/unknown-user.jpg';
+
       return logged;
     },
 
-    rawNavigator() {
-      return this.navigatorData?.navigator ?? [];
-    },
-
     navigator() {
-      var navigator = this.$getService('toolcase/utils').cloneObj(this.rawNavigator ?? []);
+      const navigator = this.$getService('sidebar').getData();
 
       for (let i = 0; i < navigator.length; i++) {
         let item = navigator[i];
@@ -152,7 +146,7 @@ export default {
 
       return (!!this.searchTermActive) ?
         navigator.filter((obj) => obj.tags.includes(this.searchTermActive.toLowerCase())) :
-        this.rawNavigator;
+        navigator;
     }
   },
 

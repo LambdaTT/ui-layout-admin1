@@ -229,7 +229,7 @@ export default {
 
       $hdr.$emit('load', 'logout');
 
-      var url = this.getModule('iam').ENDPOINTS.AUTH.LOGOUT;
+      var url = this.$getModule('iam').endpoints().AUTH.LOGOUT;
 
       if (localStorage.getItem('authtoken'))
         url += '?token=' + localStorage.getItem('authtoken');
