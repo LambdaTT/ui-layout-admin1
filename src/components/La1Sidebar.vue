@@ -105,7 +105,11 @@ export default {
   },
 
   props: {
-    outerDrawerState: Boolean
+    outerDrawerState: Boolean,
+    DataServiceURI: {
+      type: String,
+      required: true
+    }
   },
 
   watch: {
@@ -129,7 +133,7 @@ export default {
     },
 
     navigator() {
-      const navigator = this.$getService('sidebar').getData();
+      const navigator = this.$getService(this.DataServiceURI).getData();
 
       for (let i = 0; i < navigator.length; i++) {
         let item = navigator[i];
@@ -137,7 +141,7 @@ export default {
         if (!!this.searchTermActive) {
           if (!!item.subItems) {
             item.menuOpen = true;
-            item.subItems = item.subItems.filter((obj) => obj.tags.includes(this.searchTermActive.toLowerCase()));
+            item.subItems = item.subItems.filter((obj) => obj.tags.toLowerCase().includes(this.searchTermActive.toLowerCase()));
           }
         } else {
           item.menuOpen = false;
@@ -145,7 +149,7 @@ export default {
       }
 
       return (!!this.searchTermActive) ?
-        navigator.filter((obj) => obj.tags.includes(this.searchTermActive.toLowerCase())) :
+        navigator.filter((obj) => obj.tags.toLowerCase().includes(this.searchTermActive.toLowerCase())) :
         navigator;
     }
   },

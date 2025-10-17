@@ -3,9 +3,10 @@
     <q-layout v-if="state === 'ready'" view="hHh Lpr lff" container-fluid style="height: 300px"
       class="shadow-2 rounded-borders">
       <La1HeaderBar @load="load" @loaded="loaded" @toggleDrawer="this.drawerState = !this.drawerState;"
-        LogoPath="/resources/img/main-logo.png" :SearchOnHelpFn="searchOnHelp" :LogoutFn="signOut">
+        :LogoPath="MainLogoURL" :SearchOnHelpFn="searchOnHelp" :LogoutFn="signOut">
       </La1HeaderBar>
-      <La1Sidebar @load="load" @loaded="loaded" @drawer-hide="drawerState = false" :outerDrawerState="drawerState" />
+      <La1Sidebar @load="load" @loaded="loaded" @drawer-hide="drawerState = false" :outerDrawerState="drawerState"
+        :DataServiceURI="SidebarDataServiceURI" />
 
       <q-page-container>
         <div id="content-wrapper">
@@ -21,6 +22,17 @@
 import { useQuasar } from 'quasar'
 
 export default {
+  props: {
+    MainLogoURL: {
+      type: String,
+      default: () => '/resources/img/main-logo.png'
+    },
+    SidebarDataServiceURI: {
+      type: String,
+      default: () => 'sidebar'
+    }
+  },
+
   data() {
     return {
       $q: useQuasar(),
@@ -93,6 +105,8 @@ export default {
   },
 
   async mounted() {
+
+
     this.$q.loading.show();
 
     try {
