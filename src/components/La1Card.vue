@@ -64,4 +64,8 @@ export default {
 .card-main-section {
   overflow-x: scroll;
 }
+
+.text-h6 {
+  font-size: 1.10rem;
+}
 </style>
