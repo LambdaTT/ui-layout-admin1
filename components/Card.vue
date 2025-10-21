@@ -3,14 +3,14 @@
     <q-card-section :class="`${dense ? 'q-pa-sm' : 'q-pa-lg'} bg-${style.headerBgColor} text-${style.headerTextColor}`">
       <!--Card Header-->
       <div class="row items-center q-gutter-y-sm">
-        <div :class="`col-12 ${forceMobile? '':'col-md-4 q-mb-md-none'}`" style="display: flex; align-items: center;">
+        <div :class="`col-12 ${forceMobile ? '' : 'col-md-4 q-mb-md-none'}`" style="display: flex; align-items: center;">
           <span class="text-h6" :style="`display: flex; align-items: center; gap: ${dense ? '1px' : '4px'}`">
             <q-icon v-if="!!Icon" :name="Icon" :size="dense ? 'xs' : 'md'"></q-icon>
             <span v-if="!!Icon">&nbsp;</span>
             {{ Title }}
           </span>
         </div>
-        <div v-if="(`actions` in $slots)" :class="`col-12 text-right ${forceMobile? '':'col-md-8'}`">
+        <div v-if="(`actions` in $slots)" :class="`col-12 text-right ${forceMobile ? '' : 'col-md-8'}`">
           <slot name="actions"></slot>
         </div>
       </div>
@@ -63,5 +63,9 @@ export default {
 <style scoped>
 .card-main-section {
   overflow-x: scroll;
+}
+
+.text-h6 {
+  font-size: 1.10rem;
 }
 </style>
