@@ -110,7 +110,7 @@ export default {
     this.$q.loading.show();
 
     try {
-      await this.$getService('iam/auth').authenticate(this);
+      await this.$getService('iam/auth').authenticate();
       await this.$getService('iam/permissions').getUserPermissions();
     } catch (error) {
       console.error(error);
