@@ -227,7 +227,7 @@ export default {
 
       var $hdr = this;
 
-      $hdr.$emit('load', 'logout');
+      $hdr.$getService('toolcase/loader').load( 'logout');
 
       var url = this.$getModule('iam').endpoints().AUTH.LOGOUT;
 
@@ -236,7 +236,7 @@ export default {
 
       this.$getService('toolcase/http').delete(url)
         .then(function () {
-          $hdr.$emit('loaded', 'logout');
+          $hdr.$getService('toolcase/loader').loaded( 'logout');
           localStorage.removeItem('authtoken');
           localStorage.removeItem('xsrf_token');
           localStorage.removeItem('iam_session_key');
