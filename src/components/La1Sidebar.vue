@@ -35,7 +35,7 @@
       </q-list>
 
       <q-list padding>
-        <template v-if="navigator.length == 0">
+        <template v-if="navigator?.length == 0">
           <q-separator></q-separator>
           <q-item>
             <q-item-section avatar>
@@ -50,7 +50,7 @@
           </q-item>
         </template>
         <!-- Nav Items -->
-        <template v-if="navigator.length > 0">
+        <template v-if="navigator?.length > 0">
           <div v-for="(item, index) in navigator" :key="index">
             <q-separator v-if="item.type == 'header'" />
             <!-- Item with no children -->
