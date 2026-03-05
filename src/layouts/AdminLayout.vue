@@ -1,12 +1,28 @@
 <template>
   <div class="text-grey-9">
-    <q-layout v-if="state === 'ready'" view="hHh Lpr lff" container-fluid style="height: 300px"
-      class="shadow-2 rounded-borders">
-      <La1HeaderBar @load="load" @loaded="loaded" @toggleDrawer="this.drawerState = !this.drawerState;"
-        :LogoPath="MainLogoURL" :SearchOnHelpFn="searchOnHelp" :LogoutFn="signOut">
+    <q-layout
+      v-if="state === 'ready'"
+      view="hHh Lpr lff"
+      container-fluid
+      style="height: 300px"
+      class="shadow-2 rounded-borders"
+    >
+      <La1HeaderBar
+        @load="load"
+        @loaded="loaded"
+        @toggleDrawer="this.drawerState = !this.drawerState"
+        :LogoPath="MainLogoURL"
+        :SearchOnHelpFn="searchOnHelp"
+        :LogoutFn="signOut"
+      >
       </La1HeaderBar>
-      <La1Sidebar @load="load" @loaded="loaded" @drawer-hide="drawerState = false" :outerDrawerState="drawerState"
-        :DataServiceURI="SidebarDataServiceURI" />
+      <La1Sidebar
+        @load="load"
+        @loaded="loaded"
+        @drawer-hide="drawerState = false"
+        :outerDrawerState="drawerState"
+        :DataServiceURI="SidebarDataServiceURI"
+      />
 
       <q-page-container>
         <div id="content-wrapper">
@@ -19,18 +35,22 @@
 
 <script>
 // Libs:
-import { useQuasar } from 'quasar'
+import { useQuasar } from "quasar";
 
 export default {
   props: {
     MainLogoURL: {
       type: String,
-      default: () => '/resources/img/main-logo.png'
+      default: () => "/resources/img/main-logo.png",
     },
     SidebarDataServiceURI: {
       type: String,
-      default: () => 'sidebar'
-    }
+      default: () => "sidebar",
+    },
+    NavItems: {
+      type: Array,
+      default: () => [],
+    },
   },
 
   data() {
@@ -39,95 +59,96 @@ export default {
       toLoad: [],
       drawerState: true,
       authTimeOut: null,
-      state: 'loading',
-    }
+      state: "loading",
+    };
   },
 
   methods: {
     searchOnHelp() {
       var url = "/help/search?terms=" + this.searchTerm;
-      window.open(url, '_blank').focus();
+      window.open(url, "_blank").focus();
     },
 
     load(evt) {
-      console.log('load', evt);
+      console.log("load", evt);
       this.$q.loading.show();
-      if (evt && evt != '')
-        this.toLoad.push(evt);
+      if (evt && evt != "") this.toLoad.push(evt);
     },
 
     loaded(evt) {
-      console.log('loaded', evt);
+      console.log("loaded", evt);
       var index = this.toLoad.indexOf(evt);
 
       if (index != -1) this.toLoad.splice(index, 1);
 
-      if (this.toLoad.length == 0)
-        this.$q.loading.hide();
-
+      if (this.toLoad.length == 0) this.$q.loading.hide();
     },
 
     signOut() {
-      return this.$getService('iam/auth').logout(this)
-        .then(() => location.href = '/login');
+      return this.$getService("iam/auth")
+        .logout(this)
+        .then(() => (location.href = "/login"));
     },
 
     inactivityHandler() {
       var debounceTimeout = null;
       var goToRoute = null;
 
-      this.$getService('toolcase/eventbroadcaster').$on('http-request-sent', (reqPromise) => {
-        reqPromise.catch((err) => {
-          goToRoute = goToRoute ?? this.$route.path;
-          if (!!debounceTimeout) {
-            clearTimeout(debounceTimeout);
-            debounceTimeout = null;
-          }
-          debounceTimeout = setTimeout(() => {
-            if (err.response?.status == 401 && !(err.config?.url.includes('/iam/auth/v1/log'))) {
-              this.$router.push(`/login?goTo=${goToRoute}`);
-
-              this.$getService('toolcase/utils').notify({
-                message: 'Sua sessão expirou. Por favor, entre novamente.',
-                type: 'warning',
-                position: 'top-right',
-              });
+      this.$getService("toolcase/eventbroadcaster").$on(
+        "http-request-sent",
+        (reqPromise) => {
+          reqPromise.catch((err) => {
+            goToRoute = goToRoute ?? this.$route.path;
+            if (!!debounceTimeout) {
+              clearTimeout(debounceTimeout);
+              debounceTimeout = null;
             }
-          }, 200);
-        });
-      });
+            debounceTimeout = setTimeout(() => {
+              if (
+                err.response?.status == 401 &&
+                !err.config?.url.includes("/iam/auth/v1/log")
+              ) {
+                this.$router.push(`/login?goTo=${goToRoute}`);
+
+                this.$getService("toolcase/utils").notify({
+                  message: "Sua sessão expirou. Por favor, entre novamente.",
+                  type: "warning",
+                  position: "top-right",
+                });
+              }
+            }, 200);
+          });
+        },
+      );
     },
 
     loadHandler() {
-      this.$getService('toolcase/eventbroadcaster').$on('load', this.load);
-      this.$getService('toolcase/eventbroadcaster').$on('loaded', this.loaded);
-    }
+      this.$getService("toolcase/eventbroadcaster").$on("load", this.load);
+      this.$getService("toolcase/eventbroadcaster").$on("loaded", this.loaded);
+    },
   },
 
   async mounted() {
-
-
     this.$q.loading.show();
 
     try {
-      await this.$getService('iam/auth').authenticate();
-      await this.$getService('iam/permissions').getUserPermissions();
+      await this.$getService("iam/auth").authenticate();
+      await this.$getService("iam/permissions").getUserPermissions();
     } catch (error) {
       console.error(error);
     }
 
     setTimeout(() => {
-      this.loaded('init');
+      this.loaded("init");
     }, 300);
 
     // Handle Inactivity
     this.inactivityHandler();
     this.loadHandler();
 
-    this.state = 'ready';
+    this.state = "ready";
   },
-
-}
+};
 </script>
 <style scoped>
 #content-wrapper {
