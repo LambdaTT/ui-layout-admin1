@@ -1,16 +1,64 @@
 <template>
   <q-card>
-    <q-card-section :class="`${dense ? 'q-pa-sm' : 'q-pa-lg'} bg-${style.headerBgColor} text-${style.headerTextColor}`">
+    <q-card-section
+      :class="`${dense ? 'q-pa-sm' : 'q-pa-lg'} bg-${
+        style.headerBgColor
+      } text-${style.headerTextColor}`"
+    >
       <!--Card Header-->
       <div class="row items-center q-gutter-y-sm">
-        <div :class="`col-12 ${forceMobile? '':'col-md-5 q-mb-md-none'}`" style="display: flex; align-items: center;">
-          <span class="text-h6" :style="`display: flex; align-items: center; gap: ${dense ? '1px' : '4px'}`">
-            <q-icon v-if="!!Icon" :name="Icon" :size="dense ? 'xs' : 'md'"></q-icon>
-            <span v-if="!!Icon">&nbsp;</span>
+        <div
+          :class="`col-12 ${forceMobile ? '' : 'col-md-5 q-mb-md-none'}`"
+          style="display: flex; align-items: center"
+        >
+          <span
+            class="text-h6"
+            :style="`display: flex; align-items: center; gap: ${
+              dense ? '1px' : '4px'
+            }`"
+          >
+            <div
+              v-if="$isCustomIcon(Icon)"
+              :class="`${dense ? '' : 'q-mr-sm'}`"
+              :style="`
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: ${dense ? '18px' : '32px'};
+                height: ${dense ? '18px' : '32px'};
+                font-size: ${dense ? '9px' : '16px'};
+              `"
+            >
+              <component :is="Icon" />
+            </div>
+            <div
+              v-else-if="!!IconHtml"
+              v-html="IconHtml"
+              :class="`${dense ? '' : 'q-mr-sm'}`"
+              :style="`
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: ${dense ? '18px' : '32px'};
+                height: ${dense ? '18px' : '32px'};
+                font-size: ${dense ? '9px' : '16px'};
+              `"
+            ></div>
+            <q-icon
+              v-else-if="!!Icon"
+              :name="Icon"
+              :size="dense ? 'xs' : 'md'"
+            ></q-icon>
+            <span v-if="!!Icon && !IconHtml && !$isCustomIcon(Icon)"
+              >&nbsp;</span
+            >
             {{ Title }}
           </span>
         </div>
-        <div v-if="(`actions` in $slots)" :class="`col-12 text-right ${forceMobile? '':'col-md-7'}`">
+        <div
+          v-if="`actions` in $slots"
+          :class="`col-12 text-right ${forceMobile ? '' : 'col-md-7'}`"
+        >
           <slot name="actions"></slot>
         </div>
       </div>
@@ -24,7 +72,10 @@
     <!--Secondary Sections-->
     <div v-for="(section, name) in $slots" :key="name">
       <q-separator v-if="name != 'actions' && name != 'default'"></q-separator>
-      <q-card-section class="q-pa-xs q-pa-md-md" v-if="name != 'actions' && name != 'default'">
+      <q-card-section
+        class="q-pa-xs q-pa-md-md"
+        v-if="name != 'actions' && name != 'default'"
+      >
         <slot :name="name"></slot>
       </q-card-section>
     </div>
@@ -33,31 +84,33 @@
 
 <script>
 export default {
-  name: 'ui-layoutadmin-card',
+  name: "ui-layoutadmin-card",
 
   props: {
     Title: String,
     Icon: String,
+    IconHtml: String,
     HeaderBgColor: String,
     HeaderTextColor: String,
     dense: Boolean,
-    forceMobile: Boolean
+    forceMobile: Boolean,
   },
 
   data() {
     return {
       style: {
-        headerBgColor: 'teal',
-        headerTextColor: 'white'
-      }
-    }
+        headerBgColor: "teal",
+        headerTextColor: "white",
+      },
+    };
   },
 
   mounted() {
     if (!!this.HeaderBgColor) this.style.headerBgColor = this.HeaderBgColor;
-    if (!!this.HeaderTextColor) this.style.headerTextColor = this.HeaderTextColor;
-  }
-}
+    if (!!this.HeaderTextColor)
+      this.style.headerTextColor = this.HeaderTextColor;
+  },
+};
 </script>
 
 <style scoped>
@@ -66,6 +119,6 @@ export default {
 }
 
 .text-h6 {
-  font-size: 1.10rem;
+  font-size: 1.1rem;
 }
 </style>

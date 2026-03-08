@@ -7,17 +7,31 @@
       <!-- Main logo -->
       <q-toolbar-title>
         <span class="cursor-pointer" v-on:click="navToHome()">
-          <q-img class="main-logo vertical-middle" alt="Logotipo" :src="LogoPath" />
+          <q-img
+            class="main-logo vertical-middle"
+            alt="Logotipo"
+            :src="LogoPath"
+          />
           <q-tooltip>Ir para a Home</q-tooltip>
         </span>
       </q-toolbar-title>
 
       <!-- Input: Search on help (Desktop Only) -->
       <q-toolbar-title class="gt-sm" v-if="!!SearchOnHelpFn">
-        <q-input disable label-color="grey-8" outlined v-model="searchTerm" label="Pesquisar na ajuda">
+        <q-input
+          disable
+          label-color="grey-8"
+          outlined
+          v-model="searchTerm"
+          label="Pesquisar na ajuda"
+        >
           <template v-slot:append>
             <q-btn flat size="sm">
-              <q-icon @click="SearchOnHelpFn()" name="fas fa-search" color="grey-8" />
+              <q-icon
+                @click="SearchOnHelpFn()"
+                name="fas fa-search"
+                color="grey-8"
+              />
             </q-btn>
           </template>
         </q-input>
@@ -28,7 +42,13 @@
         <q-tooltip>Pesquisar na ajuda</q-tooltip>
         <q-icon name="fas fa-search" color="grey-8" />
         <q-menu>
-          <q-input color="grey-3" label-color="grey-8" outlined v-model="searchTerm" label="Pesquisar na ajuda">
+          <q-input
+            color="grey-3"
+            label-color="grey-8"
+            outlined
+            v-model="searchTerm"
+            label="Pesquisar na ajuda"
+          >
             <template v-slot:append>
               <q-btn v-on:click="SearchOnHelpFn()" flat size="sm">
                 <q-icon name="fas fa-search" color="grey-8" />
@@ -40,42 +60,77 @@
 
       <!-- Btn: Notifications -->
       <q-btn class="q-ma-sm" flat round icon="fas fa-bell" size="sm">
-        <q-tooltip v-if="notifications.length == 0">Não há nenhuma notificação.</q-tooltip>
-        <q-tooltip v-if="notifications.length > 0">{{ notifications.length }} nova notificação(ões)</q-tooltip>
-        <q-badge :rounded="true" v-if="newNotifications > 0" color="red" floating>{{ newNotifications }}</q-badge>
+        <q-tooltip v-if="notifications.length == 0"
+          >Não há nenhuma notificação.</q-tooltip
+        >
+        <q-tooltip v-if="notifications.length > 0"
+          >{{ notifications.length }} nova notificação(ões)</q-tooltip
+        >
+        <q-badge
+          :rounded="true"
+          v-if="newNotifications > 0"
+          color="red"
+          floating
+          >{{ newNotifications }}</q-badge
+        >
         <q-menu>
-          <q-list class="q-pa-sm text-grey-8" style="max-height: 50vh; overflow-y: auto;">
+          <q-list
+            class="q-pa-sm text-grey-8"
+            style="max-height: 50vh; overflow-y: auto"
+          >
             <q-item class="row" v-if="notifications.length == 0">
               <div class="col-3 q-pa-sm">
                 <q-icon name="fas fa-folder-open" size="lg"></q-icon>
               </div>
-              <div class="col-9 q-pa-sm">
-                Não há notificações no momento.
-              </div>
+              <div class="col-9 q-pa-sm">Não há notificações no momento.</div>
             </q-item>
             <q-item class="text-center">
               <div class="full-width">
-                <q-btn color="primary" flat style="font-size: 0.95em;"
-                  @click="$router.push('/messaging/notifications')">
+                <q-btn
+                  color="primary"
+                  flat
+                  style="font-size: 0.95em"
+                  @click="$router.push('/messaging/notifications')"
+                >
                   Ver todas notificações
                 </q-btn>
               </div>
             </q-item>
-            <q-item class="column" :clickable="true" @click="showNotificationModal(ntf)" v-for="ntf in notifications"
+            <q-item
+              class="column"
+              :clickable="true"
+              @click="showNotificationModal(ntf)"
+              v-for="ntf in notifications"
               :key="ntf.ds_key"
-              :class="['notification-card', { 'callout-info': ntf.do_important != 'Y', 'callout-warning': ntf.do_important == 'Y', 'text-bold': ntf.do_read != 'Y' }]">
+              :class="[
+                'notification-card',
+                {
+                  'callout-info': ntf.do_important != 'Y',
+                  'callout-warning': ntf.do_important == 'Y',
+                  'text-bold': ntf.do_read != 'Y',
+                },
+              ]"
+            >
               <div>
-                <span class="float-right text-caption text-warning" v-if="ntf.do_important == 'Y'">
+                <span
+                  class="float-right text-caption text-warning"
+                  v-if="ntf.do_important == 'Y'"
+                >
                   <i class="fas fa-star"></i>
                   <q-tooltip>Importante!</q-tooltip>
-                </span> &nbsp;
+                </span>
+                &nbsp;
                 <!-- <i class="fas fa-star"></i> -->
                 <!-- <span class="text-h9">{{ ntf.author_name }}</span> -->
               </div>
               <div class="q-mt-sm media media-body">
-                <img :src="ntf.author_avatar" alt="Avatar" class="img-size-avatar img-circle mr-3"> &nbsp;
+                <img
+                  :src="ntf.author_avatar"
+                  alt="Avatar"
+                  class="img-size-avatar img-circle mr-3"
+                />
+                &nbsp;
                 <div>
-
                   <!-- <div class="q-mt-sm"> -->
                   <p v-text="ntf.author_name"></p>
                   <p v-text="ntf.ds_brief"></p>
@@ -92,24 +147,43 @@
       </q-btn>
 
       <!-- Btn: Full screen -->
-      <q-btn class="q-pa-md" flat round icon="fas fa-expand-arrows-alt" size="sm" @click="fullScreen()">
+      <q-btn
+        class="q-pa-md"
+        flat
+        round
+        icon="fas fa-expand-arrows-alt"
+        size="sm"
+        @click="fullScreen()"
+      >
         <q-tooltip>Tela cheia</q-tooltip>
       </q-btn>
 
       <!-- Btn: Sign out -->
-      <q-btn class="q-pa-md" flat round icon="fas fa-sign-out-alt" size="sm" @click="logout()">
+      <q-btn
+        class="q-pa-md"
+        flat
+        round
+        icon="fas fa-sign-out-alt"
+        size="sm"
+        @click="logout()"
+      >
         <q-tooltip>Sair</q-tooltip>
       </q-btn>
     </q-toolbar>
 
     <!-- Notification Modal -->
-    <La1NotificationModal v-model="showNotificationDialog" :notification="selectedNotification" />
+    <La1NotificationModal
+      v-model="showNotificationDialog"
+      :notification="selectedNotification"
+    />
   </q-header>
 </template>
 
 <script>
+import { ENDPOINTS } from "src/ENDPOINTS";
+
 export default {
-  name: 'ui-layoutadmin-headerbar',
+  name: "ui-layoutadmin-headerbar",
 
   props: {
     LogoPath: String,
@@ -122,8 +196,8 @@ export default {
       showNotificationDialog: false,
       selectedNotification: null,
       notifications: [],
-      searchTerm: null
-    }
+      searchTerm: null,
+    };
   },
 
   created() {
@@ -133,7 +207,7 @@ export default {
 
   methods: {
     navToHome() {
-      location.href = '/';
+      location.href = "/";
     },
 
     fullScreen() {
@@ -154,9 +228,9 @@ export default {
         } else if (document.msExitFullscreen) {
           document.msExitFullscreen();
         }
-        element.style.overflowY = 'hidden';
+        element.style.overflowY = "hidden";
       } else {
-        var element = document.getElementById('content-wrapper');
+        var element = document.getElementById("content-wrapper");
         if (element.requestFullscreen) {
           element.requestFullscreen();
         } else if (element.mozRequestFullScreen) {
@@ -166,13 +240,16 @@ export default {
         } else if (element.msRequestFullscreen) {
           element.msRequestFullscreen();
         }
-        element.style.overflowY = 'scroll';
+        element.style.overflowY = "scroll";
       }
     },
 
     getNotifications() {
       var $hdr = this;
-      return this.$getService('toolcase/http').get('/messaging/v1/notification?$limit=15&$sort_by=2&$sort_direction=DESC')
+      return this.$getService("toolcase/http")
+        .get(
+          `${ENDPOINTS.MESSAGING.NOTIFICATION}?$limit=15&$sort_by=2&$sort_direction=DESC`,
+        )
         .then(function (response) {
           $hdr.notifications = [];
           $hdr.newNotifications = 0;
@@ -181,21 +258,33 @@ export default {
             var notification = response.data[i];
 
             // Handle creation date:
-            notification.dtCreated = notification.dt_created ? this.$getService('toolcase/utils').dateFormat(new Date(notification.dt_created), 'd/m/y h:i:s') : null;
+            notification.dtCreated = notification.dt_created
+              ? this.$getService("toolcase/utils").dateFormat(
+                  new Date(notification.dt_created),
+                  "d/m/y h:i:s",
+                )
+              : null;
 
             // Handle author's avatar and name:
-            notification.author_name = notification.author_name == 'System' ? 'Sistema' : notification.author_name;
-            notification.author_avatar = !notification.author_avatar ? '/resources/img/unknown-user.jpg' : (notification.author_avatar == 'system' ? '/resources/img/system-icon.jpg' : notification.author_avatar);
+            notification.author_name =
+              notification.author_name == "System"
+                ? "Sistema"
+                : notification.author_name;
+            notification.author_avatar = !notification.author_avatar
+              ? "/resources/img/unknown-user.jpg"
+              : notification.author_avatar == "system"
+              ? "/resources/img/system-icon.jpg"
+              : notification.author_avatar;
 
             // Add notification on the list:
             $hdr.notifications.push(notification);
 
-            if (notification.do_read != 'Y') $hdr.newNotifications++;
+            if (notification.do_read != "Y") $hdr.newNotifications++;
           }
         })
         .catch((error) => {
-          console.error(error)
-          if (error.response?.status == 401) location.href = '/login';
+          console.error(error);
+          if (error.response?.status == 401) location.href = "/login";
         });
     },
 
@@ -206,17 +295,22 @@ export default {
     },
 
     readNotification(notification) {
-      if (notification.do_read != 'Y') {
-        this.$getService('toolcase/http').put('/messaging/v1/notification/' + notification.ds_key, { 'do_read': 'Y' })
+      if (notification.do_read != "Y") {
+        this.$getService("toolcase/http")
+          .put(`${ENDPOINTS.MESSAGING.NOTIFICATION}/${notification.ds_key}`, {
+            do_read: "Y",
+          })
           .then(() => {
             this.selectedNotification = notification;
-            notification.do_read = 'Y'
+            notification.do_read = "Y";
           })
           .catch((response) => {
-            console.error("An error has occurred on the attempt to read notification.", response);
-            this.$getService('toolcase/utils').notifyError(response);
+            console.error(
+              "An error has occurred on the attempt to read notification.",
+              response,
+            );
+            this.$getService("toolcase/utils").notifyError(response);
           });
-
       } else {
         this.selectedNotification = notification;
       }
@@ -227,26 +321,27 @@ export default {
 
       var $hdr = this;
 
-      $hdr.$getService('toolcase/loader').load( 'logout');
+      $hdr.$getService("toolcase/loader").load("logout");
 
-      var url = this.$getModule('iam').endpoints().AUTH.LOGOUT;
+      var url = this.$getModule("iam").endpoints().AUTH.LOGOUT;
 
-      if (localStorage.getItem('authtoken'))
-        url += '?token=' + localStorage.getItem('authtoken');
+      if (localStorage.getItem("authtoken"))
+        url += "?token=" + localStorage.getItem("authtoken");
 
-      this.$getService('toolcase/http').delete(url)
+      this.$getService("toolcase/http")
+        .delete(url)
         .then(function () {
-          $hdr.$getService('toolcase/loader').loaded( 'logout');
-          localStorage.removeItem('authtoken');
-          localStorage.removeItem('xsrf_token');
-          localStorage.removeItem('iam_session_key');
-          localStorage.removeItem('regularPermissions');
-          localStorage.removeItem('customPermissions');
-          location.href = '/login';
+          $hdr.$getService("toolcase/loader").loaded("logout");
+          localStorage.removeItem("authtoken");
+          localStorage.removeItem("xsrf_token");
+          localStorage.removeItem("iam_session_key");
+          localStorage.removeItem("regularPermissions");
+          localStorage.removeItem("customPermissions");
+          location.href = "/login";
         });
     },
-  }
-}
+  },
+};
 </script>
 
 <style scoped>
@@ -268,7 +363,7 @@ export default {
   background-color: #ffffff;
   position: relative;
   cursor: pointer;
-  font-size: 1.00em;
+  font-size: 1em;
   /* height: auto; */
 }
 

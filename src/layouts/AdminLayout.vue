@@ -13,7 +13,7 @@
         @toggleDrawer="this.drawerState = !this.drawerState"
         :LogoPath="MainLogoURL"
         :SearchOnHelpFn="searchOnHelp"
-        :LogoutFn="signOut"
+        :CornerOptions="CornerOptions"
       >
       </La1HeaderBar>
       <La1Sidebar
@@ -21,7 +21,7 @@
         @loaded="loaded"
         @drawer-hide="drawerState = false"
         :outerDrawerState="drawerState"
-        :DataServiceURI="SidebarDataServiceURI"
+        :NavItems="NavItems"
       />
 
       <q-page-container>
@@ -36,6 +36,7 @@
 <script>
 // Libs:
 import { useQuasar } from "quasar";
+import { ENDPOINTS } from "src/ENDPOINTS";
 
 export default {
   props: {
@@ -48,6 +49,10 @@ export default {
       default: () => "sidebar",
     },
     NavItems: {
+      type: Array,
+      default: () => [],
+    },
+    CornerOptions: {
       type: Array,
       default: () => [],
     },
@@ -106,7 +111,7 @@ export default {
             debounceTimeout = setTimeout(() => {
               if (
                 err.response?.status == 401 &&
-                !err.config?.url.includes("/iam/auth/v1/log")
+                !err.config?.url.includes(ENDPOINTS.IAM.AUTH.LOGIN)
               ) {
                 this.$router.push(`/login?goTo=${goToRoute}`);
 
