@@ -1,21 +1,10 @@
 <template>
-  <q-dialog
-    backdrop-filter="blur(4px) contrast(40%)"
-    :full-width="FullWidth"
-    @hide="hideFn"
-    @show="showFn"
-    :persistent="Persistent"
-    v-model="show"
-  >
+  <q-dialog backdrop-filter="blur(4px) contrast(40%)" :full-width="FullWidth" @hide="hideFn" @show="showFn"
+    :persistent="Persistent" v-model="show">
     <q-card style="min-width: 360px">
       <q-toolbar class="full-width bg-teal text-white">
         <q-avatar v-if="!!Icon">
-          <component
-            v-if="$isCustomIcon(Icon)"
-            :is="Icon"
-            style="font-size: 14px"
-          />
-          <q-icon v-else :name="Icon"></q-icon>
+          <Icon :Name="Icon" :Html="IconHtml" :Size="'md'" :Color="'white'"></Icon>
         </q-avatar>
 
         <q-toolbar-title v-if="!!Title">{{ Title }}</q-toolbar-title>
@@ -30,30 +19,13 @@
       <q-card-section class="q-pt-none">
         <div class="row justify-end">
           <div class="col-12 col-md q-py-xs-xs q-px-md-xs">
-            <q-btn
-              class="full-width"
-              dense
-              label="Fechar"
-              color="grey-8"
-              icon="close"
-              v-close-popup
-            >
+            <q-btn class="full-width" dense label="Fechar" color="grey-8" icon="close" v-close-popup>
             </q-btn>
           </div>
-          <div
-            v-show="!HideActions"
-            v-for="action in visibleActions"
-            :key="action.label"
-            class="col-12 q-py-xs-xs q-px-md-xs col-md"
-          >
-            <q-btn
-              class="full-width"
-              dense
-              :label="action.label"
-              :color="action.color"
-              :icon="action.icon"
-              @click="action.fn"
-            >
+          <div v-show="!HideActions" v-for="action in visibleActions" :key="action.label"
+            class="col-12 q-py-xs-xs q-px-md-xs col-md">
+            <q-btn class="full-width" dense :label="action.label" :color="action.color" :icon="action.icon"
+              @click="action.fn">
             </q-btn>
           </div>
         </div>

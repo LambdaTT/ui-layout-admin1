@@ -8,52 +8,13 @@
       <!--Card Header-->
       <div class="row items-center q-gutter-y-sm">
         <div
+        class="text-h6"
           :class="`col-12 ${forceMobile ? '' : 'col-md-5 q-mb-md-none'}`"
-          style="display: flex; align-items: center"
+          style="display: flex; align-items: center;"
+          :style="dense ? 'gap: 1px' : 'gap: 4px'"
         >
-          <span
-            class="text-h6"
-            :style="`display: flex; align-items: center; gap: ${
-              dense ? '1px' : '4px'
-            }`"
-          >
-            <div
-              v-if="$isCustomIcon(Icon)"
-              :class="`${dense ? '' : 'q-mr-sm'}`"
-              :style="`
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                width: ${dense ? '18px' : '32px'};
-                height: ${dense ? '18px' : '32px'};
-                font-size: ${dense ? '9px' : '16px'};
-              `"
-            >
-              <component :is="Icon" />
-            </div>
-            <div
-              v-else-if="!!IconHtml"
-              v-html="IconHtml"
-              :class="`${dense ? '' : 'q-mr-sm'}`"
-              :style="`
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                width: ${dense ? '18px' : '32px'};
-                height: ${dense ? '18px' : '32px'};
-                font-size: ${dense ? '9px' : '16px'};
-              `"
-            ></div>
-            <q-icon
-              v-else-if="!!Icon"
-              :name="Icon"
-              :size="dense ? 'xs' : 'md'"
-            ></q-icon>
-            <span v-if="!!Icon && !IconHtml && !$isCustomIcon(Icon)"
-              >&nbsp;</span
-            >
-            {{ Title }}
-          </span>
+          <Icon :Name="Icon" :Html="IconHtml" :Size="dense ? 'xs' : 'md'" :Color="style.headerTextColor"></Icon>
+          {{ Title }}
         </div>
         <div
           v-if="`actions` in $slots"
