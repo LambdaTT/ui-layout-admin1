@@ -4,8 +4,8 @@
     <q-scroll-area class="fit" :horizontal-thumb-style="{ opacity: 0 }">
       <q-list padding>
         <!-- Link: My Account -->
-        <q-item :class="`${$route.path == '/iam/my-account' ? 'bg-teal text-white' : ''}`" :clickable="true"
-          @click="navTo('/iam/my-account')">
+        <q-item :class="`${$route.path == '/' /*'/iam/my-account'*/ ? 'bg-teal text-white' : ''}`" :clickable="true"
+          @click="navTo('/' /*'iam/my-account'*/)">
           <q-tooltip>Minha Conta</q-tooltip>
           <q-item-section avatar>
             <img style="border-radius: 50%; width:25px;" :src="loggedUser?.ds_avatar_img_url">
