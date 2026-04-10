@@ -15,6 +15,9 @@
         :SearchOnHelpFn="searchOnHelp"
         :CornerOptions="CornerOptions"
       >
+        <template #actions>
+          <slot name="header-actions"></slot>
+        </template>
       </La1HeaderBar>
       <La1Sidebar
         @load="load"

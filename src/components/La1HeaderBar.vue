@@ -58,93 +58,8 @@
         </q-menu>
       </q-btn>
 
-      <!-- Btn: Notifications -->
-      <q-btn class="q-ma-sm" flat round icon="fas fa-bell" size="sm">
-        <q-tooltip v-if="notifications.length == 0"
-          >Não há nenhuma notificação.</q-tooltip
-        >
-        <q-tooltip v-if="notifications.length > 0"
-          >{{ notifications.length }} nova notificação(ões)</q-tooltip
-        >
-        <q-badge
-          :rounded="true"
-          v-if="newNotifications > 0"
-          color="red"
-          floating
-          >{{ newNotifications }}</q-badge
-        >
-        <q-menu>
-          <q-list
-            class="q-pa-sm text-grey-8"
-            style="max-height: 50vh; overflow-y: auto"
-          >
-            <q-item class="row" v-if="notifications.length == 0">
-              <div class="col-3 q-pa-sm">
-                <q-icon name="fas fa-folder-open" size="lg"></q-icon>
-              </div>
-              <div class="col-9 q-pa-sm">Não há notificações no momento.</div>
-            </q-item>
-            <q-item class="text-center">
-              <div class="full-width">
-                <q-btn
-                  color="primary"
-                  flat
-                  style="font-size: 0.95em"
-                  @click="$router.push('/messaging/notifications')"
-                >
-                  Ver todas notificações
-                </q-btn>
-              </div>
-            </q-item>
-            <q-item
-              class="column"
-              :clickable="true"
-              @click="showNotificationModal(ntf)"
-              v-for="ntf in notifications"
-              :key="ntf.ds_key"
-              :class="[
-                'notification-card',
-                {
-                  'callout-info': ntf.do_important != 'Y',
-                  'callout-warning': ntf.do_important == 'Y',
-                  'text-bold': ntf.do_read != 'Y',
-                },
-              ]"
-            >
-              <div>
-                <span
-                  class="float-right text-caption text-warning"
-                  v-if="ntf.do_important == 'Y'"
-                >
-                  <i class="fas fa-star"></i>
-                  <q-tooltip>Importante!</q-tooltip>
-                </span>
-                &nbsp;
-                <!-- <i class="fas fa-star"></i> -->
-                <!-- <span class="text-h9">{{ ntf.author_name }}</span> -->
-              </div>
-              <div class="q-mt-sm media media-body">
-                <img
-                  :src="ntf.author_avatar"
-                  alt="Avatar"
-                  class="img-size-avatar img-circle mr-3"
-                />
-                &nbsp;
-                <div>
-                  <!-- <div class="q-mt-sm"> -->
-                  <p v-text="ntf.author_name"></p>
-                  <p v-text="ntf.ds_brief"></p>
-                  <p class="text-caption text-muted q-mt-sm">
-                    <q-icon name="fas fa-clock"></q-icon> {{ ntf.dtCreated }}
-                  </p>
-                  <!-- </div> -->
-                </div>
-              </div>
-            </q-item>
-            <q-separator></q-separator>
-          </q-list>
-        </q-menu>
-      </q-btn>
+      <!-- Actions Slot -->
+      <slot name="actions"></slot>
 
       <!-- Btn: Full screen -->
       <q-btn
@@ -170,18 +85,10 @@
         <q-tooltip>Sair</q-tooltip>
       </q-btn>
     </q-toolbar>
-
-    <!-- Notification Modal -->
-    <La1NotificationModal
-      v-model="showNotificationDialog"
-      :notification="selectedNotification"
-    />
   </q-header>
 </template>
 
 <script>
-import { ENDPOINTS } from "src/ENDPOINTS";
-
 export default {
   name: "ui-layoutadmin-headerbar",
 
@@ -192,17 +99,8 @@ export default {
 
   data() {
     return {
-      newNotifications: 0,
-      showNotificationDialog: false,
-      selectedNotification: null,
-      notifications: [],
       searchTerm: null,
     };
-  },
-
-  created() {
-    // this.getNotifications();
-    // setInterval(this.getNotifications, 15 * 1000); // 15 seconds
   },
 
   methods: {
@@ -244,101 +142,27 @@ export default {
       }
     },
 
-    getNotifications() {
-      var $hdr = this;
-      return this.$getService("toolcase/http")
-        .get(
-          `${ENDPOINTS.MESSAGING.NOTIFICATION}?$limit=15&$sort_by=2&$sort_direction=DESC`,
-        )
-        .then(function (response) {
-          $hdr.notifications = [];
-          $hdr.newNotifications = 0;
-
-          for (var i = 0; i < response.data.length; i++) {
-            var notification = response.data[i];
-
-            // Handle creation date:
-            notification.dtCreated = notification.dt_created
-              ? this.$getService("toolcase/utils").dateFormat(
-                  new Date(notification.dt_created),
-                  "d/m/y h:i:s",
-                )
-              : null;
-
-            // Handle author's avatar and name:
-            notification.author_name =
-              notification.author_name == "System"
-                ? "Sistema"
-                : notification.author_name;
-            notification.author_avatar = !notification.author_avatar
-              ? "/resources/img/unknown-user.jpg"
-              : notification.author_avatar == "system"
-              ? "/resources/img/system-icon.jpg"
-              : notification.author_avatar;
-
-            // Add notification on the list:
-            $hdr.notifications.push(notification);
-
-            if (notification.do_read != "Y") $hdr.newNotifications++;
-          }
-        })
-        .catch((error) => {
-          console.error(error);
-          if (error.response?.status == 401) location.href = "/login";
-        });
-    },
-
-    showNotificationModal(notification) {
-      this.selectedNotification = notification;
-      this.showNotificationDialog = true;
-      this.readNotification(notification);
-    },
-
-    readNotification(notification) {
-      if (notification.do_read != "Y") {
-        this.$getService("toolcase/http")
-          .put(`${ENDPOINTS.MESSAGING.NOTIFICATION}/${notification.ds_key}`, {
-            do_read: "Y",
-          })
-          .then(() => {
-            this.selectedNotification = notification;
-            notification.do_read = "Y";
-          })
-          .catch((response) => {
-            console.error(
-              "An error has occurred on the attempt to read notification.",
-              response,
-            );
-            this.$getService("toolcase/utils").notifyError(response);
-          });
-      } else {
-        this.selectedNotification = notification;
-      }
-    },
-
-    logout() {
+    async logout() {
       if (!confirm("Deseja encerrar seu acesso?")) return false;
 
-      var $hdr = this;
-
-      $hdr.$getService("toolcase/loader").load("logout");
+      this.$getService("toolcase/loader").load("logout");
 
       var url = this.$getModule("iam").endpoints().AUTH.LOGOUT;
 
       if (localStorage.getItem("authtoken"))
         url += "?token=" + localStorage.getItem("authtoken");
 
-      this.$getService("toolcase/http")
-        .delete(url)
-        .then(function () {
-          $hdr.$getService("toolcase/loader").loaded("logout");
-          localStorage.removeItem("authtoken");
-          localStorage.removeItem("xsrf_token");
-          localStorage.removeItem("iam_session_key");
-          localStorage.removeItem("regularPermissions");
-          localStorage.removeItem("customPermissions");
-          location.href = "/login";
-        });
+      try {
+        await this.$getService("toolcase/http").delete(url);
+      } catch (err) {
+        localStorage.removeItem("authtoken");
+        localStorage.removeItem("xsrf_token");
+        localStorage.removeItem("iam_session_key");
+        localStorage.removeItem("regularPermissions");
+        localStorage.removeItem("customPermissions");
+        this.$getService("toolcase/loader").loaded("logout");
+        location.href = "/login";
+      }
     },
   },
 };
@@ -353,18 +177,6 @@ export default {
   margin-top: -20px;
   width: 50px;
   height: 50px;
-}
-
-.notification-card {
-  border: 1px solid #dcdcdc;
-  border-radius: 8px;
-  margin-bottom: 4px;
-  padding: 3px;
-  background-color: #ffffff;
-  position: relative;
-  cursor: pointer;
-  font-size: 1em;
-  /* height: auto; */
 }
 
 .callout-info {
@@ -393,10 +205,5 @@ export default {
 
 .mr-3 {
   margin-right: 1rem;
-}
-
-.q-menu .q-list {
-  max-height: 50vh;
-  overflow-y: auto;
 }
 </style>
