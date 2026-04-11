@@ -29,6 +29,9 @@
 
       <q-page-container>
         <div id="content-wrapper">
+          <PushNotification v-if="'push-notification' in $slots">
+            <slot name="push-notification"></slot>
+          </PushNotification>
           <router-view @load="load" @loaded="loaded" />
         </div>
       </q-page-container>
