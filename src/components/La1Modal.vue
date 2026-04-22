@@ -40,6 +40,7 @@ export default {
   props: {
     Title: String,
     Icon: String,
+    IconHtml: String,
     Persistent: Boolean,
     Actions: Array,
     Data: Object,
