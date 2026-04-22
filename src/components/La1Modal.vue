@@ -25,6 +25,7 @@
           <div v-show="!HideActions" v-for="action in visibleActions" :key="action.label"
             class="col-12 q-py-xs-xs q-px-md-xs col-md">
             <q-btn class="full-width" dense :label="action.label" :color="action.color" :icon="action.icon"
+              :disable="!!action.disable" :loading="!!action.loading"
               @click="action.fn">
             </q-btn>
           </div>
@@ -40,6 +41,7 @@ export default {
   props: {
     Title: String,
     Icon: String,
+    IconHtml: String,
     Persistent: Boolean,
     Actions: Array,
     Data: Object,
