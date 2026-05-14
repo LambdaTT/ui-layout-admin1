@@ -31,8 +31,8 @@ export default {
   },
 
   mounted() {
-    if (!!this.HeaderBgColor) this.headerBgColor = this.HeaderBgColor;
-    if (!!this.HeaderTextColor) this.headerTextColor = this.HeaderTextColor;
+    if (this.HeaderBgColor) this.headerBgColor = this.HeaderBgColor;
+    if (this.HeaderTextColor) this.headerTextColor = this.HeaderTextColor;
   }
 }
 </script>

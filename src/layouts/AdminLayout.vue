@@ -110,7 +110,7 @@ export default {
         (reqPromise) => {
           reqPromise.catch((err) => {
             goToRoute = goToRoute ?? this.$route.path;
-            if (!!debounceTimeout) {
+            if (debounceTimeout) {
               clearTimeout(debounceTimeout);
               debounceTimeout = null;
             }

@@ -157,8 +157,8 @@ export default {
       for (let i = 0; i < navigator.length; i++) {
         let item = navigator[i];
 
-        if (!!this.searchTermActive) {
-          if (!!item.subItems) {
+        if (this.searchTermActive) {
+          if (item.subItems) {
             item.menuOpen = true;
             item.subItems = item.subItems.filter((obj) =>
               obj.tags
@@ -171,7 +171,7 @@ export default {
         }
       }
 
-      return !!this.searchTermActive
+      return this.searchTermActive
         ? navigator.filter((obj) =>
           obj.tags
             ?.toLowerCase()

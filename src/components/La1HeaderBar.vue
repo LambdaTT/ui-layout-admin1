@@ -154,7 +154,7 @@ export default {
 
       try {
         await this.$getService("toolcase/http").delete(url);
-      } catch (err) {
+      } catch {
         localStorage.removeItem("authtoken");
         localStorage.removeItem("xsrf_token");
         localStorage.removeItem("iam_session_key");

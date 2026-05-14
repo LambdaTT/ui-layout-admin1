@@ -67,8 +67,8 @@ export default {
   },
 
   mounted() {
-    if (!!this.HeaderBgColor) this.style.headerBgColor = this.HeaderBgColor;
-    if (!!this.HeaderTextColor)
+    if (this.HeaderBgColor) this.style.headerBgColor = this.HeaderBgColor;
+    if (this.HeaderTextColor)
       this.style.headerTextColor = this.HeaderTextColor;
   },
 };
