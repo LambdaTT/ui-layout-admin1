@@ -41,18 +41,18 @@
 
 <script>
 // Libs:
-import { useQuasar } from "quasar";
-import { ENDPOINTS } from "src/ENDPOINTS";
+import { useQuasar } from 'quasar'
+import ENDPOINTS from '../ENDPOINTS'
 
 export default {
   props: {
     MainLogoURL: {
       type: String,
-      default: () => "/resources/img/main-logo.png",
+      default: () => '/resources/img/main-logo.png',
     },
     SidebarDataServiceURI: {
       type: String,
-      default: () => "sidebar",
+      default: () => 'sidebar',
     },
     NavItems: {
       type: Array,
@@ -70,96 +70,93 @@ export default {
       toLoad: [],
       drawerState: true,
       authTimeOut: null,
-      state: "loading",
-    };
+      state: 'loading',
+    }
   },
 
   methods: {
     searchOnHelp() {
-      var url = "/help/search?terms=" + this.searchTerm;
-      window.open(url, "_blank").focus();
+      var url = '/help/search?terms=' + this.searchTerm
+      window.open(url, '_blank').focus()
     },
 
     load(evt) {
-      console.log("load", evt);
-      this.$q.loading.show();
-      if (evt && evt != "") this.toLoad.push(evt);
+      console.log('load', evt)
+      this.$q.loading.show()
+      if (evt && evt != '') this.toLoad.push(evt)
     },
 
     loaded(evt) {
-      console.log("loaded", evt);
-      var index = this.toLoad.indexOf(evt);
+      console.log('loaded', evt)
+      var index = this.toLoad.indexOf(evt)
 
-      if (index != -1) this.toLoad.splice(index, 1);
+      if (index != -1) this.toLoad.splice(index, 1)
 
-      if (this.toLoad.length == 0) this.$q.loading.hide();
+      if (this.toLoad.length == 0) this.$q.loading.hide()
     },
 
     signOut() {
-      return this.$getService("iam/auth")
+      return this.$getService('iam/auth')
         .logout(this)
-        .then(() => (location.href = "/login"));
+        .then(() => (location.href = '/login'))
     },
 
     inactivityHandler() {
-      var debounceTimeout = null;
-      var goToRoute = null;
+      var debounceTimeout = null
+      var goToRoute = null
 
-      this.$getService("toolcase/eventbroadcaster").$on(
-        "http-request-sent",
-        (reqPromise) => {
-          reqPromise.catch((err) => {
-            goToRoute = goToRoute ?? this.$route.path;
-            if (debounceTimeout) {
-              clearTimeout(debounceTimeout);
-              debounceTimeout = null;
+      this.$getService('toolcase/eventbroadcaster').$on('http-request-sent', (reqPromise) => {
+        reqPromise.catch((err) => {
+          goToRoute = goToRoute ?? this.$route.path
+          if (debounceTimeout) {
+            clearTimeout(debounceTimeout)
+            debounceTimeout = null
+          }
+          debounceTimeout = setTimeout(() => {
+            if (
+              err.response?.status == 401 &&
+              !err.config?.url.includes(ENDPOINTS.IAM.AUTH.LOGIN)
+            ) {
+              this.$router.push(`/login?goTo=${goToRoute}`)
+
+              this.$getService('toolcase/utils').notify({
+                message: 'Sua sessão expirou. Por favor, entre novamente.',
+                type: 'warning',
+                position: 'top-right',
+              })
             }
-            debounceTimeout = setTimeout(() => {
-              if (
-                err.response?.status == 401 &&
-                !err.config?.url.includes(ENDPOINTS.IAM.AUTH.LOGIN)
-              ) {
-                this.$router.push(`/login?goTo=${goToRoute}`);
-
-                this.$getService("toolcase/utils").notify({
-                  message: "Sua sessão expirou. Por favor, entre novamente.",
-                  type: "warning",
-                  position: "top-right",
-                });
-              }
-            }, 200);
-          });
-        },
-      );
+          }, 200)
+        })
+      })
     },
 
     loadHandler() {
-      this.$getService("toolcase/eventbroadcaster").$on("load", this.load);
-      this.$getService("toolcase/eventbroadcaster").$on("loaded", this.loaded);
+      this.$getService('toolcase/eventbroadcaster').$on('load', this.load)
+      this.$getService('toolcase/eventbroadcaster').$on('loaded', this.loaded)
     },
   },
 
   async mounted() {
-    this.$q.loading.show();
+    this.$q.loading.show()
 
     try {
-      await this.$getService("iam/auth").authenticate();
-      await this.$getService("iam/permissions").getUserPermissions();
+      await this.$getService('iam/auth').authenticate()
+      await this.$getService('iam/permissions').getUserPermissions()
     } catch (error) {
-      console.error(error);
+      console.error(error)
     }
 
     setTimeout(() => {
-      this.loaded("init");
-    }, 300);
+      this.loaded('init')
+    }, 300)
 
     // Handle Inactivity
-    this.inactivityHandler();
-    this.loadHandler();
+    this.inactivityHandler()
+    this.loadHandler()
 
-    this.state = "ready";
+    this.state = 'ready'
   },
-};
+}
 </script>
 <style scoped>
 #content-wrapper {
