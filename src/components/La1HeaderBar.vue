@@ -7,31 +7,17 @@
       <!-- Main logo -->
       <q-toolbar-title>
         <span class="cursor-pointer" v-on:click="navToHome()">
-          <q-img
-            class="main-logo vertical-middle"
-            alt="Logotipo"
-            :src="LogoPath"
-          />
+          <q-img class="main-logo vertical-middle" alt="Logotipo" :src="LogoPath" />
           <q-tooltip>Ir para a Home</q-tooltip>
         </span>
       </q-toolbar-title>
 
       <!-- Input: Search on help (Desktop Only) -->
       <q-toolbar-title class="gt-sm" v-if="!!SearchOnHelpFn">
-        <q-input
-          disable
-          label-color="grey-8"
-          outlined
-          v-model="searchTerm"
-          label="Pesquisar na ajuda"
-        >
+        <q-input disable label-color="grey-8" outlined v-model="searchTerm" label="Pesquisar na ajuda">
           <template v-slot:append>
             <q-btn flat size="sm">
-              <q-icon
-                @click="SearchOnHelpFn()"
-                name="fas fa-search"
-                color="grey-8"
-              />
+              <q-icon @click="SearchOnHelpFn()" name="fas fa-search" color="grey-8" />
             </q-btn>
           </template>
         </q-input>
@@ -42,13 +28,7 @@
         <q-tooltip>Pesquisar na ajuda</q-tooltip>
         <q-icon name="fas fa-search" color="grey-8" />
         <q-menu>
-          <q-input
-            color="grey-3"
-            label-color="grey-8"
-            outlined
-            v-model="searchTerm"
-            label="Pesquisar na ajuda"
-          >
+          <q-input color="grey-3" label-color="grey-8" outlined v-model="searchTerm" label="Pesquisar na ajuda">
             <template v-slot:append>
               <q-btn v-on:click="SearchOnHelpFn()" flat size="sm">
                 <q-icon name="fas fa-search" color="grey-8" />
@@ -62,26 +42,12 @@
       <slot name="actions"></slot>
 
       <!-- Btn: Full screen -->
-      <q-btn
-        class="q-pa-md"
-        flat
-        round
-        icon="fas fa-expand-arrows-alt"
-        size="sm"
-        @click="fullScreen()"
-      >
+      <q-btn class="q-pa-md" flat round icon="fas fa-expand-arrows-alt" size="sm" @click="fullScreen()">
         <q-tooltip>Tela cheia</q-tooltip>
       </q-btn>
 
       <!-- Btn: Sign out -->
-      <q-btn
-        class="q-pa-md"
-        flat
-        round
-        icon="fas fa-sign-out-alt"
-        size="sm"
-        @click="logout()"
-      >
+      <q-btn class="q-pa-md" flat round icon="fas fa-sign-out-alt" size="sm" @click="logout()">
         <q-tooltip>Sair</q-tooltip>
       </q-btn>
     </q-toolbar>
@@ -95,6 +61,10 @@ export default {
   props: {
     LogoPath: String,
     SearchOnHelpFn: Function,
+    HomepageURL: {
+      type: String,
+      default: () => "/"
+    }
   },
 
   data() {
@@ -105,7 +75,7 @@ export default {
 
   methods: {
     navToHome() {
-      location.href = "/";
+      location.href = this.HomepageURL;
     },
 
     fullScreen() {
@@ -155,6 +125,8 @@ export default {
       try {
         await this.$getService("toolcase/http").delete(url);
       } catch {
+        // segue o logout localmente mesmo se a chamada falhar
+      } finally {
         localStorage.removeItem("authtoken");
         localStorage.removeItem("xsrf_token");
         localStorage.removeItem("iam_session_key");

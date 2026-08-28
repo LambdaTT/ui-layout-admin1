@@ -1,31 +1,16 @@
 <template>
   <div class="text-grey-9">
-    <q-layout
-      v-if="state === 'ready'"
-      view="hHh Lpr lff"
-      container-fluid
-      style="height: 300px"
-      class="shadow-2 rounded-borders"
-    >
-      <La1HeaderBar
-        @load="load"
-        @loaded="loaded"
-        @toggleDrawer="this.drawerState = !this.drawerState"
-        :LogoPath="MainLogoURL"
-        :SearchOnHelpFn="searchOnHelp"
-        :CornerOptions="CornerOptions"
-      >
+    <q-layout v-if="state === 'ready'" view="hHh Lpr lff" container-fluid style="height: 300px"
+      class="shadow-2 rounded-borders">
+      <La1HeaderBar @load="load" @loaded="loaded" @toggleDrawer="this.drawerState = !this.drawerState"
+        :LogoPath="MainLogoURL" :SearchOnHelpFn="searchOnHelp" :CornerOptions="CornerOptions"
+        :HomepageURL="HomepageURL">
         <template #actions>
           <slot name="header-actions"></slot>
         </template>
       </La1HeaderBar>
-      <La1Sidebar
-        @load="load"
-        @loaded="loaded"
-        @drawer-hide="drawerState = false"
-        :outerDrawerState="drawerState"
-        :NavItems="NavItems"
-      />
+      <La1Sidebar @load="load" @loaded="loaded" @drawer-hide="drawerState = false" :outerDrawerState="drawerState"
+        :NavItems="NavItems" />
 
       <q-page-container>
         <div id="content-wrapper">
@@ -61,6 +46,10 @@ export default {
     CornerOptions: {
       type: Array,
       default: () => [],
+    },
+    HomepageURL: {
+      type: String,
+      default: () => '/',
     },
   },
 
