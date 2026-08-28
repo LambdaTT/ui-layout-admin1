@@ -61,9 +61,9 @@ export default {
   props: {
     LogoPath: String,
     SearchOnHelpFn: Function,
-    HomepageURL: {
+    RootURI: {
       type: String,
-      default: () => "/"
+      default: () => "/",
     }
   },
 
@@ -73,9 +73,15 @@ export default {
     };
   },
 
+  computed: {
+    rootURI() {
+      return this.RootURI.endsWith('/') ? this.RootURI : `${this.RootURI}/`
+    }
+  },
+
   methods: {
     navToHome() {
-      location.href = this.HomepageURL;
+      location.href = this.rootURI;
     },
 
     fullScreen() {
@@ -133,7 +139,7 @@ export default {
         localStorage.removeItem("regularPermissions");
         localStorage.removeItem("customPermissions");
         this.$getService("toolcase/loader").loaded("logout");
-        location.href = "/login";
+        location.href = `${this.rootURI}login`;
       }
     },
   },

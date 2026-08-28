@@ -3,8 +3,7 @@
     <q-layout v-if="state === 'ready'" view="hHh Lpr lff" container-fluid style="height: 300px"
       class="shadow-2 rounded-borders">
       <La1HeaderBar @load="load" @loaded="loaded" @toggleDrawer="this.drawerState = !this.drawerState"
-        :LogoPath="MainLogoURL" :SearchOnHelpFn="searchOnHelp" :CornerOptions="CornerOptions"
-        :HomepageURL="HomepageURL">
+        :LogoPath="MainLogoURL" :SearchOnHelpFn="searchOnHelp" :CornerOptions="CornerOptions" :RootURI="RootURI">
         <template #actions>
           <slot name="header-actions"></slot>
         </template>
@@ -47,7 +46,7 @@ export default {
       type: Array,
       default: () => [],
     },
-    HomepageURL: {
+    RootURI: {
       type: String,
       default: () => '/',
     },
