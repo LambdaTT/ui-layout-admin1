@@ -13,6 +13,7 @@
 
       <q-page-container>
         <div id="content-wrapper">
+          <slot name="banner"></slot>
           <PushNotification v-if="'push-notification' in $slots">
             <slot name="push-notification"></slot>
           </PushNotification>
