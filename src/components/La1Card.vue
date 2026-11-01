@@ -1,25 +1,15 @@
 <template>
   <q-card>
-    <q-card-section
-      :class="`${dense ? 'q-pa-sm' : 'q-pa-lg'} bg-${
-        style.headerBgColor
-      } text-${style.headerTextColor}`"
-    >
+    <q-card-section :class="`${dense ? 'q-pa-sm' : 'q-pa-md'} bg-${style.headerBgColor
+      } text-${style.headerTextColor}`">
       <!--Card Header-->
       <div class="row items-center q-gutter-y-sm">
-        <div
-        class="text-h6"
-          :class="`col-12 ${forceMobile ? '' : 'col-md-5 q-mb-md-none'}`"
-          style="display: flex; align-items: center;"
-          :style="dense ? 'gap: 1px' : 'gap: 4px'"
-        >
+        <div class="text-bold" :class="`col-12 ${forceMobile ? '' : 'col-md-5 q-mb-md-none'}`"
+          style="display: flex; align-items: center;" :style="dense ? 'gap: 1px' : 'gap: 4px'">
           <Icon :Name="Icon" :Html="IconHtml" :Size="dense ? 'xs' : 'md'" :Color="style.headerTextColor"></Icon>
           {{ Title }}
         </div>
-        <div
-          v-if="`actions` in $slots"
-          :class="`col-12 text-right ${forceMobile ? '' : 'col-md-7'}`"
-        >
+        <div v-if="`actions` in $slots" :class="`col-12 text-right ${forceMobile ? '' : 'col-md-7'}`">
           <slot name="actions"></slot>
         </div>
       </div>
@@ -33,10 +23,7 @@
     <!--Secondary Sections-->
     <div v-for="(section, name) in $slots" :key="name">
       <q-separator v-if="name != 'actions' && name != 'default'"></q-separator>
-      <q-card-section
-        class="q-pa-xs q-pa-md-md"
-        v-if="name != 'actions' && name != 'default'"
-      >
+      <q-card-section class="q-pa-xs q-pa-md-md" v-if="name != 'actions' && name != 'default'">
         <slot :name="name"></slot>
       </q-card-section>
     </div>

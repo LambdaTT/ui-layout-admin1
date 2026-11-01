@@ -1,7 +1,7 @@
 <template>
   <div class="row">
     <div class="col-12 col-md-6 q-pa-md q-pa-md-none">
-      <h4 class="gt-xs">{{ pageTitle }}</h4>
+      <h4 class="gt-xs q-my-md">{{ pageTitle }}</h4>
       <div class="lt-sm text-h5 q-mt-md">{{ pageTitle }}</div>
     </div>
     <div class="col-12 col-md-6">
