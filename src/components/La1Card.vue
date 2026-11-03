@@ -6,7 +6,7 @@
       <div class="row items-center q-gutter-y-sm">
         <div class="text-bold" :class="`col-12 ${forceMobile ? '' : 'col-md-5 q-mb-md-none'}`"
           style="display: flex; align-items: center;" :style="dense ? 'gap: 1px' : 'gap: 4px'">
-          <Icon :Name="Icon" :Html="IconHtml" :Size="dense ? 'xs' : 'md'" :Color="style.headerTextColor"></Icon>
+          <Icon :Name="Icon" :Html="IconHtml" :Size="dense ? 'xs' : 'sm'" :Color="style.headerTextColor"></Icon>
           {{ Title }}
         </div>
         <div v-if="`actions` in $slots" :class="`col-12 text-right ${forceMobile ? '' : 'col-md-7'}`">
