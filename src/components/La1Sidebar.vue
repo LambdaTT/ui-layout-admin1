@@ -4,7 +4,7 @@
     <q-scroll-area class="fit" :horizontal-thumb-style="{ opacity: 0 }">
       <q-list padding>
         <!-- Link: My Account -->
-        <q-item v-if="loggedUser != null" :class="`${$route.path == '/iam/my-account' ? 'bg-teal text-white' : ''
+        <q-item v-if="loggedUser != null" :class="`${$route.path == '/iam/my-account' ? 'bg-brand-orange text-white' : ''
           }`" :clickable="true" @click="navTo('/iam/my-account')">
           <q-tooltip>Minha Conta</q-tooltip>
           <q-item-section avatar>
@@ -52,12 +52,12 @@
           <div v-for="(item, index) in navigator" :key="index">
             <q-separator v-if="item.type == 'header'" />
             <!-- Item with no children -->
-            <q-item :class="`${$route.path == item.href ? 'bg-teal text-white' : ''}`" :clickable="item.type == 'item'"
-              @click="navTo(item.href, item)" v-if="!item.subItems || item.subItems.length == 0">
+            <q-item :class="`${$route.path == item.href ? 'bg-brand-orange text-white' : ''}`"
+              :clickable="item.type == 'item'" @click="navTo(item.href, item)"
+              v-if="!item.subItems || item.subItems.length == 0">
               <q-item-section avatar>
                 <span v-if="item.type == 'header'">&nbsp;</span>
-                <Icon :Name="item.icon" :Html="item.iconHtml" Size="sm"
-                  Color="white"></Icon>
+                <Icon :Name="item.icon" :Html="item.iconHtml" Size="sm" Color="white"></Icon>
               </q-item-section>
               <q-item-section>
                 <span :class="item.type == 'header' ? 'sidebar-section-title' : ''">{{ item.title }}</span>
@@ -65,12 +65,11 @@
             </q-item>
 
             <!-- Item with children -->
-            <q-expansion-item :default-opened="Boolean(item.menuOpen)" :class="`${$route.path.includes(item.href) ? 'bg-teal text-white' : ''
+            <q-expansion-item :default-opened="Boolean(item.menuOpen)" :class="`${$route.path.includes(item.href) ? 'bg-brand-orange text-white' : ''
               }`" v-if="item.subItems?.length > 0">
               <template v-slot:header>
                 <q-item-section avatar>
-                  <Icon :Name="item.icon" :Html="item.iconHtml" Size="sm"
-                    Color="white"></Icon>
+                  <Icon :Name="item.icon" :Html="item.iconHtml" Size="sm" Color="white"></Icon>
                 </q-item-section>
                 <q-item-section>
                   {{ item.title }}
@@ -78,8 +77,8 @@
               </template>
               <q-list padding>
                 <q-item :class="`${$route.path.includes(subitem.href)
-                    ? 'bg-white text-teal'
-                    : ''
+                  ? 'bg-white text-bold text-brand-orange'
+                  : ''
                   }`" v-for="(subitem, subindex) in item.subItems" :key="subindex" clickable v-ripple
                   @click="navTo(subitem.href, item, subitem)">
                   <q-item-section avatar> &nbsp; </q-item-section>

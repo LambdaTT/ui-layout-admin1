@@ -23,3 +23,13 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+/* Último item do breadcrumb (página atual) no laranja da marca Cartappio.
+   O Quasar envolve cada item num wrapper próprio e marca só o último com a
+   classe `q-breadcrumbs--last` — é nele (e no ícone dentro) que aplicamos a cor. */
+.q-breadcrumbs :deep(.q-breadcrumbs--last),
+.q-breadcrumbs :deep(.q-breadcrumbs--last .q-breadcrumbs__el) {
+  color: $brand-orange;
+}
+</style>
